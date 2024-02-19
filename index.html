@@ -91,7 +91,8 @@
         <h1>Iniciar sesión</h1>
         <ion-item>
           <ion-input placeholder="Usuario" id="loginUsuario"></ion-input>
-        </ion-item> <ion-item>
+        </ion-item> 
+        <ion-item>
           <ion-input placeholder="Contraseña" type="password" id="loginPassword"></ion-input>
         </ion-item>
         <ion-button expand="block" color="danger" id="submitLogin" onclick="previaLogin()">Iniciar sesión</ion-button>
@@ -106,7 +107,20 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <h1>Bienvenido!</h1>
+        <h1>Registrar usuario</h1>
+        <ion-item>
+          <ion-input placeholder="Usuario" id="registroUsuario"></ion-input>
+        </ion-item> 
+        <ion-item>
+          <ion-input placeholder="Contraseña" type="password" id="registroPassword"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input placeholder="Calorias diarias" type="number" id="caloriasDiarias"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-select id="registroPais" placeholder="Seleccionar pais"></ion-select>
+        </ion-item>
+        <ion-button expand="block" color="danger" id="submitRegistro" onclick="previaRegistroU()">Registrar usuario</ion-button>
       </ion-content>
     </page-registroU>
 
@@ -118,7 +132,17 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <h1>Bienvenido!</h1>
+        <h1>Registrar comida</h1>
+        <ion-item>
+          <ion-select id="registroAlimento" placeholder="Seleccionar comida"></ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-input id="cantidadAlimento" placeholder="Seleccionar cantidad"></ion-input>  
+        </ion-item>
+        <ion-item>
+          <ion-datetime presentation="date-time" prefer-wheel="true" locale="es"></ion-datetime>
+
+        </ion-item>
       </ion-content>
     </page-registroC>
 
