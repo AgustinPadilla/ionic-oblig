@@ -14,7 +14,7 @@
 <body>
 
   <ion-app>
-    
+
     <!-- RUTEO -->
 
     <ion-router id="router">
@@ -91,7 +91,7 @@
         <h1>Iniciar sesión</h1>
         <ion-item>
           <ion-input placeholder="Usuario" id="loginUsuario"></ion-input>
-        </ion-item> 
+        </ion-item>
         <ion-item>
           <ion-input placeholder="Contraseña" type="password" id="loginPassword"></ion-input>
         </ion-item>
@@ -110,7 +110,7 @@
         <h1>Registrar usuario</h1>
         <ion-item>
           <ion-input placeholder="Usuario" id="registroUsuario"></ion-input>
-        </ion-item> 
+        </ion-item>
         <ion-item>
           <ion-input placeholder="Contraseña" type="password" id="registroPassword"></ion-input>
         </ion-item>
@@ -120,7 +120,8 @@
         <ion-item>
           <ion-select id="registroPais" placeholder="Seleccionar pais"></ion-select>
         </ion-item>
-        <ion-button expand="block" color="danger" id="submitRegistro" onclick="previaRegistroU()">Registrar usuario</ion-button>
+        <ion-button expand="block" color="danger" id="submitRegistro" onclick="previaRegistroU()">Registrar
+          usuario</ion-button>
       </ion-content>
     </page-registroU>
 
@@ -137,12 +138,24 @@
           <ion-select id="registroAlimento" placeholder="Seleccionar comida"></ion-select>
         </ion-item>
         <ion-item>
-          <ion-input id="cantidadAlimento" placeholder="Seleccionar cantidad"></ion-input>  
+          <ion-input id="cantidadAlimento" placeholder="Seleccionar cantidad" type="number"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-datetime presentation="date-time" prefer-wheel="true" locale="es"></ion-datetime>
+          <ion-input type="date" id="fechaAlimento"></ion-input>
+          <script>
+            // Obtener el elemento de entrada de fecha
+            var inputFecha = document.getElementById('fechaAlimento');
 
+            // Obtener la fecha actual en el formato requerido por el atributo 'min'
+            var fechaActual = new Date().toISOString().split('T')[0];
+
+            // Establecer el atributo 'min' del elemento de entrada de fecha a la fecha actual
+            inputFecha.max = fechaActual;
+          </script>
         </ion-item>
+        <ion-button expand="block" color="danger" id="submitRegistro" onclick="previaRegistroC()">Registrar
+          comida</ion-button>
+
       </ion-content>
     </page-registroC>
 
@@ -154,7 +167,17 @@
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">
-        <h1>Bienvenido!</h1>
+        <ion-item>
+          <ion-input label="Fecha inicial" type="date" id="ListadoFecha1"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input label="Fecha final" type="date" id="ListadoFecha2"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-button expand="block" color="danger" id="listarComidas">Listar</ion-button>
+
+        </ion-item>
+        <ion-content class="ion-padding" id="listaAlimentos"></ion-content>
       </ion-content>
     </page-listadoC>
 

@@ -18,9 +18,9 @@ const BTNMAPA = document.querySelector('#btnMapa')
 const BTNCERRARSESION = document.querySelector('#btnCerrarSesion')
 
 const URLBASE = 'https://calcount.develotion.com/'
+let listaComida = []
 
 inicio()
-
 function cerrarMenu() {
   MENU.close()
 }
@@ -34,6 +34,8 @@ function eventos() {
   ROUTER.addEventListener("ionRouteDidChange", navegar)
   BTNREGISTRARU.addEventListener('click', getPaises)
   BTNREGISTRARC.addEventListener('click', getAlimentos)
+  BTNLISTARC.addEventListener('click', previaListarComida)
+  document.querySelector('#btnMapa').addEventListener('click', listarComida(listaComida))
 }
 
 function navegar(event) {
@@ -82,6 +84,7 @@ function chequearSesion() {
   ocultarBotones()
   if (localStorage.getItem("apiKey") != null) {
     mostrarMenuUsuario()
+    getAlimentos()
   } else {
     mostrarMenuAnon()
   }
@@ -216,7 +219,7 @@ function iniciarSesion(data) {
 }
 
 function getAlimentos() {
-  fetch(`${URLBASE}/alimentos.php`,{
+  fetch(`${URLBASE}/alimentos.php`, {
     headers: {
       'Content-Type': 'application/json',
       'apikey': localStorage.getItem('apiKey'),
@@ -242,4 +245,100 @@ function cargarListaAlimentos(alimentos) {
     result += `<ion-select-option ${alimento.id}>${alimento.nombre}</ion-select-option>`
   }
   document.querySelector('#registroAlimento').innerHTML = result
+}
+
+function previaRegistroC() {
+  let alimento = Number(document.querySelector('#registroAlimento').value)
+  let cantidad = Number(document.querySelector('#cantidadAlimento').value)
+  let fecha = document.querySelector('#fechaAlimento').value
+
+  let registro = {}
+  registro.idAlimento = alimento
+  registro.idUsuario = localStorage.getItem('idUsuario')
+  registro.cantidad = cantidad
+  registro.fecha = fecha
+  hacerRegistro(registro)
+}
+
+function hacerRegistro(registro) {
+  fetch(`${URLBASE}/registros.php`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': localStorage.getItem('apiKey'),
+      'iduser': localStorage.getItem('idUsuario')
+    },
+    body: JSON.stringify(registro)
+  })
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      if (data.codigo === 200) {
+        ocultarPantallas()
+        HOME.style.display = "block"
+        alert("comida registrada")
+        document.querySelector('#registroAlimento').value = ''
+        document.querySelector('#cantidadAlimento').value = ''
+        document.querySelector('#fechaAlimento').value = ''
+      } else {
+        alert("error")
+      }
+    })
+
+}
+
+function previaListarComida() {
+  fetch(`${URLBASE}/registros.php?idUsuario=${localStorage.getItem('idUsuario')}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': localStorage.getItem('apiKey'),
+      'iduser': localStorage.getItem('idUsuario')
+    }
+  }
+  )
+    .then(response => {
+      return response.json()
+    })
+    .then(data => {
+      console.log(data.registros)
+      listaComida = data.registros
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+}
+
+function listarComida(registros) {
+  const fechaInicial = document.querySelector('#ListadoFecha1').value
+  const fechaFinal = document.querySelector('#ListadoFecha2').value
+  // TODO: obtener data segun ID, listar esa data.
+  let verRegistro = ``
+
+  if (fechaInicial === '' | fechaFinal === '') {
+    alert("error, debe indicar ambas fechas o ninguna")
+  } else {
+    if (fechaInicial > fechaFinal) {
+      alert("error, la fecha final no puede ser anterior a la fecha inicial")
+    } else {
+      for (let registro of registros) {
+        if (registro.fecha >= fechaInicial && registro.fecha <= fechaFinal) {
+          verRegistro += ` <ion-item>
+           <ion-label>
+             <ion-thumbnail slot="start">
+               <img src="https://calcount.develotion.com/imgs/${registro.id}"/>
+             </ion-thumbnail>
+               <h2>Nombre: ${registro.id}</h2>
+               <p>Cantidad: ${registro.cantidad}</p>
+               <p>calorias: ${registro.calorias}</p>
+               <p>fecha: ${registro.fecha}</p>
+           </ion-label>
+           <ion-button onclick="eliminarRegistro(${registro.id})">Eliminar </ion-button>
+          </ion-item>`
+        }
+      }
+      document.querySelector('#listaAlimentos').innerHTML = verRegistro
+      console.log(verRegistro)
+    }
+  }
 }
